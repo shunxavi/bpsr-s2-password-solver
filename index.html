@@ -21,140 +21,153 @@
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.6);
     }
-    h1 {
-      text-align: center;
-      color: #a78bfa;
-      margin-bottom: 8px;
-    }
-    .subtitle {
-      text-align: center;
-      color: #94a3b8;
-      margin-bottom: 24px;
-    }
+    h1 { text-align: center; color: #a78bfa; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #94a3b8; margin-bottom: 24px; }
     #guess-display {
+      font-size: 3.5rem;
+      font-weight: bold;
+      text-align: center;
+      letter-spacing: 16px;
+      background: #2d2d44;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 24px 0;
+      min-height: 100px;
+    }
+    
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 360px;
+      margin: 32px auto;
+    }
+    
+    .number-btn {
+      width: 100%;
+      aspect-ratio: 1 / 1;
       font-size: 3rem;
       font-weight: bold;
-      text-align: center;
-      letter-spacing: 12px;
-      background: #2d2d44;
-      padding: 16px;
-      border-radius: 8px;
-      margin: 20px 0;
-      min-height: 80px;
-    }
-    .controls {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    label {
-      font-size: 1.1rem;
-    }
-    input[type="number"] {
-      width: 100%;
-      padding: 12px;
-      font-size: 1.2rem;
-      text-align: center;
-      border: 2px solid #4f46e5;
-      border-radius: 6px;
-      background: #1e1e38;
-      color: white;
-    }
-    button {
-      padding: 14px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      background: #6366f1;
+      background: #4f46e5;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 20px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.18s;
+      box-shadow: 0 6px 16px rgba(79,70,229,0.35);
     }
-    button:hover {
-      background: #4f46e5;
+    .number-btn:hover {
+      background: #6366f1;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(79,70,229,0.5);
     }
-    button:disabled {
-      background: #4b5563;
-      cursor: not-allowed;
+    
+    .undo-btn {
+      width: 140px;
+      height: 56px;
+      font-size: 1.3rem;
+      background: #f59e0b;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin: 16px auto;
+      display: block;
     }
+    .undo-btn:hover { background: #d97706; transform: translateY(-2px); }
+    .undo-btn:disabled { background: #4b5563; cursor: not-allowed; opacity: 0.6; }
+    
     #status {
-      margin-top: 20px;
-      padding: 12px;
-      border-radius: 8px;
+      margin: 20px 0;
+      padding: 14px;
+      border-radius: 10px;
       text-align: center;
       font-weight: bold;
+      font-size: 1.1rem;
     }
     .success { background: #10b981; color: white; }
     .error   { background: #ef4444; color: white; }
     .info    { background: #3b82f6; color: white; }
+    
     #history {
-      margin-top: 24px;
+      margin-top: 28px;
       padding: 16px;
       background: #111827;
-      border-radius: 8px;
-      max-height: 300px;
+      border-radius: 10px;
+      max-height: 340px;
       overflow-y: auto;
     }
     .history-item {
-      margin: 8px 0;
-      padding: 8px;
+      margin: 10px 0;
+      padding: 10px;
       background: #1f2937;
-      border-radius: 6px;
+      border-radius: 8px;
     }
+    
+    .reset-link {
+      display: block;
+      text-align: center;
+      margin-top: 24px;
+      color: #94a3b8;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .reset-link:hover { color: #cbd5e1; }
   </style>
 </head>
 <body>
 
 <div class="container">
   <h1>4位數密碼破解助手</h1>
-  <p class="subtitle">密碼只由 1 和 2 組成<br>遊戲回饋：正確位置且正確數字的個數（0–4）</p>
+  <p class="subtitle">密碼只由 1 和 2 組成　遊戲回饋：正確位置且正確數字的個數（0–3）</p>
 
-  <div id="guess-display">按「送出」開始猜測</div>
+  <div id="guess-display">按下方數字開始</div>
 
   <div class="controls">
-    <label>輸入遊戲告訴你的正確數（0–4）：</label>
-    <input type="number" id="correct-input" min="0" max="4" value="" placeholder="0 到 4">
-
-    <button id="submit-btn">送出並取得下一個建議</button>
-    <button id="reset-btn">重新開始</button>
+    <button class="number-btn" data-value="0">0</button>
+    <button class="number-btn" data-value="1">1</button>
+    <button class="number-btn" data-value="2">2</button>
+    <button class="number-btn" data-value="3">3</button>
   </div>
+
+  <button id="undo-btn" class="undo-btn" disabled>回到上一步</button>
 
   <div id="status" class="info">準備開始！（16 種可能）</div>
 
   <div id="history">
     <strong>猜測歷史：</strong><br>
-    <!-- 歷史會動態加入 -->
   </div>
+
+  <div class="reset-link" id="reset-link">重新開始</div>
 </div>
 
 <script>
-// 所有可能的組合
+// 狀態堆疊，用來支援撤銷
+let historyStack = [];
+
 let possibilities = [
-  "1111","1112","1121","1122",
-  "1211","1212","1221","1222",
-  "2111","2112","2121","2122",
-  "2211","2212","2221","2222"
+  "1111","1112","1121","1122","1211","1212","1221","1222",
+  "2111","2112","2121","2122","2211","2212","2221","2222"
 ];
 
 let currentGuess = null;
 let guessCount = 0;
-const historyDiv = document.getElementById("history");
-const statusDiv = document.getElementById("status");
-const guessDisplay = document.getElementById("guess-display");
-const input = document.getElementById("correct-input");
-const submitBtn = document.getElementById("submit-btn");
-const resetBtn = document.getElementById("reset-btn");
+
+const historyDiv    = document.getElementById("history");
+const statusDiv     = document.getElementById("status");
+const guessDisplay  = document.getElementById("guess-display");
+const resetLink     = document.getElementById("reset-link");
+const undoBtn       = document.getElementById("undo-btn");
+const numberButtons = document.querySelectorAll(".number-btn");
 
 function getRemainingText() {
   return `（${possibilities.length} 種可能剩下）`;
 }
 
 function pickGuess() {
-  if (possibilities.length === 0) {
-    return "????";
-  }
-  // 簡單策略：拿第一個
+  if (possibilities.length === 0) return "????";
   return possibilities[0];
 }
 
@@ -166,17 +179,21 @@ function countMatches(code, guess) {
   return matches;
 }
 
+function saveState() {
+  historyStack.push({
+    possibilities: [...possibilities],
+    currentGuess: currentGuess,
+    guessCount: guessCount,
+    historyHTML: historyDiv.innerHTML
+  });
+}
+
 function updateGuess() {
   currentGuess = pickGuess();
   guessDisplay.textContent = currentGuess;
   guessCount++;
-  
-  // 無論是否解決，都顯示剩餘數量
   statusDiv.textContent = `建議輸入：${currentGuess}  ${getRemainingText()}`;
   statusDiv.className = "info";
-  
-  input.value = "";
-  input.focus();
 }
 
 function addToHistory(guess, correct) {
@@ -188,60 +205,76 @@ function addToHistory(guess, correct) {
 }
 
 function filterPossibilities(correct) {
-  const newPoss = [];
-  for (let code of possibilities) {
-    if (countMatches(code, currentGuess) === correct) {
-      newPoss.push(code);
-    }
-  }
-  possibilities = newPoss;
+  possibilities = possibilities.filter(code => countMatches(code, currentGuess) === correct);
 }
 
 function showSolved() {
   guessDisplay.textContent = currentGuess;
-  statusDiv.textContent = `破解成功！密碼就是 ${currentGuess}  ${getRemainingText()} （共用了 ${guessCount} 次建議）`;
+  statusDiv.textContent = `破解成功！密碼就是 ${currentGuess}  ${getRemainingText()} （共 ${guessCount} 次）`;
   statusDiv.className = "success";
-  submitBtn.disabled = true;
   guessDisplay.style.color = "#34d399";
 }
 
-// 初始化
-updateGuess();
-
-submitBtn.addEventListener("click", () => {
-  const val = parseInt(input.value);
-  if (isNaN(val) || val < 0 || val > 4) {
-    statusDiv.textContent = "請輸入 0 到 4 的數字 " + getRemainingText();
-    statusDiv.className = "error";
-    return;
-  }
-
-  addToHistory(currentGuess, val);
-
-  if (val === 4) {
-    showSolved();
-    return;
-  }
-
-  filterPossibilities(val);
+function handleCorrect(correct) {
+  saveState();
+  addToHistory(currentGuess, correct);
+  filterPossibilities(correct);
 
   if (possibilities.length === 1) {
     currentGuess = possibilities[0];
     showSolved();
   } else if (possibilities.length === 0) {
-    statusDiv.textContent = `錯誤：已無可能組合 ${getRemainingText()}，請檢查之前的輸入`;
+    statusDiv.textContent = `錯誤：已無可能組合 ${getRemainingText()}，請檢查輸入`;
     statusDiv.className = "error";
-    submitBtn.disabled = true;
   } else {
     updateGuess();
   }
+
+  undoBtn.disabled = false;
+}
+
+function undoLastStep() {
+  if (historyStack.length === 0) return;
+
+  const prev = historyStack.pop();
+  possibilities = prev.possibilities;
+  currentGuess = prev.currentGuess;
+  guessCount = prev.guessCount;
+  historyDiv.innerHTML = prev.historyHTML;
+
+  guessDisplay.textContent = currentGuess;
+  guessDisplay.style.color = "";
+  statusDiv.textContent = `已撤銷 → 回到：${currentGuess}  ${getRemainingText()}`;
+  statusDiv.className = "info";
+
+  if (historyStack.length === 0) {
+    undoBtn.disabled = true;
+  }
+}
+
+// 初始化
+updateGuess();
+
+// 綁定 0/1/2/3 按鈕
+numberButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const value = parseInt(btn.dataset.value);
+    handleCorrect(value);
+  });
 });
 
-resetBtn.addEventListener("click", () => {
+// 撤銷
+undoBtn.addEventListener("click", undoLastStep);
+
+// 重新開始
+resetLink.addEventListener("click", () => {
   possibilities = ["1111","1112","1121","1122","1211","1212","1221","1222","2111","2112","2121","2122","2211","2212","2221","2222"];
+  currentGuess = null;
   guessCount = 0;
+  historyStack = [];
   historyDiv.innerHTML = "<strong>猜測歷史：</strong><br>";
-  submitBtn.disabled = false;
+  guessDisplay.style.color = "";
+  undoBtn.disabled = true;
   updateGuess();
 });
 </script>
